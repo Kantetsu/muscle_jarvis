@@ -8,3 +8,6 @@ gem 'sinatra'
 gem 'dotenv'
 gem 'pry-byebug'
 gem 'rest-client'
+gem 'google-api-client'
+gem 'trollop'
+gem "rails"
