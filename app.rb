@@ -1,10 +1,11 @@
-require 'dotenv'
-require 'sinatra'
-require 'line/bot'
+require "rubygems"
+require "dotenv"
+require "sinatra"
+require "line/bot"
 require "pry"
 require 'rest-client'
-require 'google/api_client'
-require 'trollop'
+require "google/api_client"
+require "trollop"
 
 DEVELOPER_KEY = ENV["YOUTUBE_API_KEY"]
 YOUTUBE_API_SERVICE_NAME = "youtube"
