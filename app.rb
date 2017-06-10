@@ -24,9 +24,7 @@ end
 def get_service
   client = Google::APIClient.new(
     :key => DEVELOPER_KEY,
-    :authorization => nil,
-    :application_name => "muscle-jarvis",
-    :application_version => '1.0.0'
+    :authorization => nil
   )
   youtube = client.discovered_api(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION)
 
@@ -104,7 +102,7 @@ post '/callback' do
           type: 'text',
           text: event.message['text']
         }
-        client.reply_message(event['replyToken'], youtube_api(message))
+        client.reply_message(event['replyToken'], youtube_api(message[:text]))
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
         tf = Tempfile.open("content")
