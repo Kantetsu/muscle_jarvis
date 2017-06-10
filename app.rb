@@ -36,7 +36,7 @@ post '/callback' do
     case event
     when Line::Bot::Event::Message
       case event.type
-      when Line::Bot::Event::MessageType::Text
+      when Line::Bot::Event::MessageType::Text == "プロレス最高！"
         message = {
           type: 'text',
           text: event.message['text']
