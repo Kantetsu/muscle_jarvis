@@ -3,8 +3,8 @@ require "dotenv"
 require "sinatra"
 require "line/bot"
 require "pry"
-require 'rest-client'
-require "google/api_client"
+require "rest-client"
+require 'google/apis/youtube_v3'
 require "trollop"
 
 DEVELOPER_KEY = ENV["YOUTUBE_API_KEY"]
