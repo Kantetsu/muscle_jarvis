@@ -36,11 +36,14 @@ post '/callback' do
     case event
     when Line::Bot::Event::Message
       case event.type
-      when Line::Bot::Event::MessageType::Text == "プロレス最高！"
+      when Line::Bot::Event::MessageType::Text
         message = {
           type: 'text',
           text: event.message['text']
         }
+        if message["text"] == "プロレス最高"
+          message["text"] = "週刊プロレス見たことあんの？"
+        end
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
