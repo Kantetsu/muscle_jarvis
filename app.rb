@@ -41,8 +41,8 @@ post '/callback' do
           type: 'text',
           text: event.message['text']
         }
-        if message["text"] == "プロレス最高"
-          message["text"] = "週刊プロレス見たことあんの？"
+        if message[:text] == "プロレス最高"
+          message[:text] = "週刊プロレス見たことあんの？"
         end
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
