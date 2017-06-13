@@ -77,12 +77,7 @@ end
 # メニューを表示させる
 def menu_select
   messages = []
-  first_message = {
-    type: "text",
-    text: "どこを鍛えたいですか？"
-  }
-  messages.push(first_message)
-  second_message = {
+  menu_message = {
     "type": "template",
     "altText": "this is a buttons template",
     "template": {
@@ -113,7 +108,7 @@ def menu_select
       ]
     }
   }
-  messages.push(second_message)
+  messages.push(menu_message)
   return messages
 end
 
