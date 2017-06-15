@@ -23,6 +23,9 @@ def client
   }
 end
 
+# ユーザーの状態を収容するハッシュ
+status = {}
+
 post '/callback' do
   body = request.body.read
 
@@ -33,6 +36,7 @@ post '/callback' do
 
   events = client.parse_events_from(body)
   events.each { |event|
+    user_id = event["source"]["userId"]
     case event
     when Line::Bot::Event::Message
       case event.type
@@ -41,14 +45,38 @@ post '/callback' do
           type: 'text',
           text: event.message['text']
         }
-        case message[:text]
-        when "メニュー"
-          messages = menu_select
-        when "youtuber"
-          messages = youtuber_list
+        if status[user_id] == 100
+          case message[:text]
+          when "はい", "いいえ"
+            status[user_id] = 101
+          else
+            messages = []
+            message = {
+              type: 'text',
+              text: "「はい」か「いいえ」で答えてください"
+            }
+            messages.push(message)
+          end
         else
-          messages = research_youtube(message[:text])
+          case message[:text]
+          when "メニュー"
+            messages = menu_select
+          when "youtuber"
+            messages = youtuber_list
+          when "健康管理"
+            messages = health_management
+          else
+            messages = research_youtube(message[:text])
+          end
         end
+        if status[user_id] == 101
+          messages = []
+          message = {
+            type: 'text',
+            text: "それでよろしい"
+          }
+        end
+        messages.push(message)
         client.reply_message(event['replyToken'], messages)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
@@ -74,7 +102,7 @@ def youtube_api(word)
   return youtube_movies
 end
 
-# メニューを表示させる
+# メニューを表示
 def menu_select
   messages = []
   menu_message = {
@@ -182,6 +210,32 @@ def youtuber_list
   }
   messages.push(second_message)
   return messages
+end
+
+# 健康管理を表示
+def health_management
+  messages = []
+  message = {
+    "type": "template",
+    "altText": "this is a confirm template",
+    "template": {
+        "type": "confirm",
+        "text": "プロテインを摂取しますか？",
+        "actions": [
+            {
+              "type": "message",
+              "label": "はい",
+              "text": "はい"
+            },
+            {
+              "type": "message",
+              "label": "いいえ",
+              "text": "いいえ"
+            }
+        ]
+    }
+  }
+  messages.push(message)
 end
 
 # 動画を検索
